@@ -1,3 +1,4 @@
+import 'package:aplikasi_hello_world/http/get_list_model.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -25,7 +26,18 @@ class _MyAppState extends State<MyApp> {
             children: [
               Text(output),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  User.getUsers('2').then((users) {
+                    // users.forEach((element) {
+                    //   print(element);
+                    // });
+                    output = '';
+                    for (int i = 0; i < users.length; i++) {
+                      output = output + '[ ' + users[i].name + ' ]';
+                    }
+                    setState(() {});
+                  });
+                },
                 child: Text('GET LIST USER'),
               ),
             ],
