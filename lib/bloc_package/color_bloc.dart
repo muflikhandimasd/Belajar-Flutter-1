@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 
 enum ColorEvent { toAmber, toLightBlue }
 
+///Event = masukan
+///State = keluaran
+
 class ColorBloc extends Bloc<ColorEvent, Color> {
   // kita bikin statenya
   Color _color = Colors.amber;
