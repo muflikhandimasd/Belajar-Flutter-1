@@ -11,8 +11,22 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  ScrollController scrollController = ScrollController();
+  PostBloc bloc;
+
+  void onScroll() {
+    double maxScroll = scrollController.position.maxScrollExtent;
+    double currentScroll = scrollController.position.pixels;
+    if (currentScroll == maxScroll) {
+      bloc.add(PostEvent());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    bloc = BlocProvider.of<PostBloc>(context);
+    scrollController.addListener(onScroll);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Infinite List with BLoC'),
@@ -24,7 +38,7 @@ class _MainPageState extends State<MainPage> {
         ),
         child: BlocBuilder<PostBloc, PostState>(builder: (context, state) {
           if (state is PostUnitialized) {
-            return Center(
+            return const Center(
                 child: SizedBox(
               width: 30,
               height: 30,
@@ -33,10 +47,20 @@ class _MainPageState extends State<MainPage> {
           } else {
             PostLoaded postLoaded = state as PostLoaded;
             return ListView.builder(
-                itemCount: postLoaded.posts.length,
+                controller: scrollController,
+                itemCount: (postLoaded.hasReachedMax)
+                    ? postLoaded.posts.length
+                    : postLoaded.posts.length + 1,
+                // 1 nya untuk circular progress
                 itemBuilder: (context, index) {
                   // return Text(postLoaded.posts[index].title);
-                  return PostItem(postLoaded.posts[index]);
+                  return (index < postLoaded.posts.length)
+                      ? PostItem(postLoaded.posts[index])
+                      : const SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: CircularProgressIndicator(),
+                        );
                 });
           }
         }),
