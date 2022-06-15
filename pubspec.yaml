@@ -37,8 +37,10 @@ dependencies:
   http: ^0.12.0+2
   shared_preferences: ^0.5.3+4
   provider: ^3.0.0+1
-  flutter_bloc: ^0.21.0
-  hydrated_bloc: ^0.4.1
+  # flutter_bloc: ^0.21.0
+  bloc: ^1.0.0
+  flutter_bloc: ^1.0.0
+  hydrated_bloc: ^1.0.0
 
 dev_dependencies:
   flutter_test:

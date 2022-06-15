@@ -1,0 +1,37 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+class Post {
+  String id, title, body;
+
+  Post({this.id, this.title, this.body});
+
+  factory Post.createPost(Map<String, dynamic> object) {
+    return Post(
+      id: object['id'],
+      title: object['title'],
+      body: object['body'],
+    );
+  }
+
+  static Future<List<Post>> connectToAPI(int start, int limit) async {
+    List data = [];
+
+    String apiURL = 'https://jsonplaceholder.typicode.com/posts?_start=' +
+        start.toString() +
+        '&_limit=' +
+        limit.toString();
+    var apiResult = await http.get(apiURL);
+    var jsonObject = json.decode(apiResult.body) as List;
+
+    data = jsonObject.map<Post>((item) {
+      return Post(
+        id: item['id'].toString(),
+        title: item['title'],
+        body: item['body'],
+      );
+    }).toList();
+
+    return data;
+  }
+}
